@@ -50,7 +50,7 @@ const productSchema = new mongoose.Schema(
     images: [String],
     category: {
       type: mongoose.Schema.ObjectId,
-      ref: "category",
+      ref: "Category",
       required: [true, "Product must be belong to category"],
     },
     subcategories: [
@@ -116,6 +116,16 @@ const productSchema = new mongoose.Schema(
         },
       },
     ],
+<<<<<<< Updated upstream
+=======
+    ingredients: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: "Ingredients",
+      },
+    ],
+>>>>>>> Stashed changes
     ISavailable: {
       type: Boolean,
       default: true,
