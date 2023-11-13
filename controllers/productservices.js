@@ -1,5 +1,7 @@
 const slugify = require("slugify");
 const Productmodel = require("../models/productModel");
+const Ingredient = require("../models/System/IngredientsModel");
+const Storehouse = require("../models/System/storehouseModel");
 const asyncHandler = require("express-async-handler");
 const ApiError = require("../utils/apiError");
 const ApiFeatures = require("../utils/apiFeatures");
@@ -162,5 +164,43 @@ class products {
     res.status(204).send();
   });
 }
+
+exports.subtractIngredientsFromStorehouse = async (productId, quantitySold) => {
+  try {
+    // Get the product by its ID
+    const product = await Productmodel.findById(productId);
+    // Check if the product exists
+    if (!product) {
+      throw new Error("Product not found");
+    }
+    // Get the ingredients of the product
+    const ingredients = await Ingredient.find({
+      _id: { $in: product.ingredients },
+    });
+    // Calculate the quantity of each ingredient to subtract
+    const ingredientsToSubtract = ingredients.map((ingredient) => ({
+      ingredientId: ingredient._id,
+      quantity: ingredient.quantity * quantitySold,
+    }));
+    // Update the storehouse by subtracting the ingredient quantities
+    await Promise.all(
+      ingredientsToSubtract.map(async (ingredientToSubtract) => {
+        const storehouse = await Storehouse.findOneAndUpdate(
+          { products: product._id },
+          { $inc: { "products.$.quantity": -ingredientToSubtract.quantity } },
+          { new: true }
+        );
+        // Check if the storehouse exists
+        if (!storehouse) {
+          throw new Error("Storehouse not found");
+        }
+      })
+    );
+    return true; // Or any other success response
+  } catch (error) {
+    console.error(error);
+    return false; // Or any other error response
+  }
+};
 
 module.exports = products;
