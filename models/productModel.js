@@ -11,8 +11,8 @@ const productSchema = new mongoose.Schema(
     },
     storeID: {
       type: mongoose.Schema.ObjectId,
-      required: true,
-      ref: "Store",
+      required:true,
+      ref : "Store"
     },
     slug: {
       type: String,
@@ -114,12 +114,6 @@ const productSchema = new mongoose.Schema(
           required: true,
           default: "Supplier",
         },
-      },
-    ],
-    ingredients: [
-      {
-        type: ObjectId,
-        ref: "Ingredients",
       },
     ],
     ISavailable: {
