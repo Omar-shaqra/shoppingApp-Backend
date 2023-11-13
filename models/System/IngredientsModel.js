@@ -1,11 +1,10 @@
 const mongoose = require("mongoose");
 
 const IngredientsSchema = new mongoose.Schema({
-  name: String,
-  quantity: Number,
-  unit: {
+  name: {
     type: String,
-    enum: ["grams", "kilograms"],
+    required: true,
+    trim: true,
   },
 });
 

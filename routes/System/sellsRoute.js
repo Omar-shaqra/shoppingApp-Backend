@@ -5,6 +5,7 @@ const {
   getSell,
   updateSell,
   deleteSell,
+  SubtractIngedients,
 } = require("../../controllers/System/sellsController");
 const {
   sellsValidation,
@@ -16,5 +17,7 @@ router
   .get(getSell)
   .patch(sellsValidation, updateSell)
   .delete(deleteSell);
+
+router.route("/:productId").post(SubtractIngedients);
 
 module.exports = router;

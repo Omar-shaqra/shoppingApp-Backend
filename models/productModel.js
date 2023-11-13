@@ -118,8 +118,15 @@ const productSchema = new mongoose.Schema(
     ],
     ingredients: [
       {
-        type: ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: "Ingredients",
+      },
+      { quantity: Number },
+      {
+        unit: {
+          type: String,
+          enum: ["grams", "kilograms"],
+        },
       },
     ],
     ISavailable: {
