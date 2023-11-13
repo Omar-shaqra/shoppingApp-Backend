@@ -50,7 +50,7 @@ const productSchema = new mongoose.Schema(
     images: [String],
     category: {
       type: mongoose.Schema.ObjectId,
-      ref: "Category",
+      ref: "category",
       required: [true, "Product must be belong to category"],
     },
     subcategories: [
@@ -118,8 +118,7 @@ const productSchema = new mongoose.Schema(
     ],
     ingredients: [
       {
-        type: mongoose.Schema.Types.ObjectId,
-        required: true,
+        type: ObjectId,
         ref: "Ingredients",
       },
     ],
