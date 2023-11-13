@@ -8,11 +8,20 @@ const storehouseValidation = [
 
   check("products").optional(),
 
-  check("quantity")
+  check("quantitySold")
     .optional()
     .isNumeric()
-    .withMessage("Quantity must be a number"),
+    .withMessage("Quantity sold must be a number"),
 
+  check("openingBalance")
+    .optional()
+    .isNumeric()
+    .withMessage("Opening balance must be a number"),
+
+  check("closingBalance")
+    .optional()
+    .isNumeric()
+    .withMessage("Closing balance must be a number"),
   validatorMiddleware,
 ];
 

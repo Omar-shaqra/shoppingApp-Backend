@@ -13,7 +13,9 @@ const storehouseSchema = new mongoose.Schema(
         ref: "Product",
       },
     ],
-    quantity: { type: Number, required: true },
+    quantitySold: Number,
+    openingBalance: Number,
+    closingBalance: Number,
   },
   {
     timestamps: true,
