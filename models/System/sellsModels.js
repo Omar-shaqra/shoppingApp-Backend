@@ -26,7 +26,6 @@ const sellsSchema = new mongoose.Schema({
   },
   billcount: {
     type: Number,
-    required: true,
   },
   unit: {
     type: String,

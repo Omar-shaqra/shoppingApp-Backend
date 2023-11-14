@@ -118,8 +118,10 @@ const productSchema = new mongoose.Schema(
     ],
     ingredients: [
       {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Ingredients",
+        ingredient: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Ingredients",
+        },
       },
       { quantity: Number },
       {

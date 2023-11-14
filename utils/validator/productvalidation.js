@@ -110,7 +110,6 @@ exports.createProductValidator = [
     .optional()
     .isNumeric()
     .withMessage("ratingsQuantity must be a number"),
-
   validatorMiddleware,
 ];
 

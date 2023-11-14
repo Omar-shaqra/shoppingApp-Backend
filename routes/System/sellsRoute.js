@@ -18,6 +18,6 @@ router
   .patch(sellsValidation, updateSell)
   .delete(deleteSell);
 
-router.route("/:productId").post(SubtractIngedients);
+router.route("/suptract").post(SubtractIngedients);
 
 module.exports = router;

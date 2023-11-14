@@ -1,6 +1,8 @@
 const Sells = require("../../models/System/sellsModels");
 const Product = require("../../models/productModel");
 const Storehouse = require("../../models/System/storehouseModel");
+const ingredient = require("../../models/System/IngredientsModel");
+
 const { incrementBillCount } = require("./billcontroller");
 module.exports = {
   async createSell(req, res) {
@@ -60,68 +62,86 @@ module.exports = {
   },
 
   async SubtractIngedients(req, res) {
-    const { productId } = req.params;
-    const { quantity, unit } = req.body;
-
     try {
-      // Find the product by ID
-      const product = await Product.findById(productId).populate(
-        "ingredients.ingredient"
-      );
+      const { productId, quantity, unit } = req.body;
+      const {
+        paymentType,
+        shopId,
+        systemUserId,
+        clientId,
+        billcount,
+        totalPrice,
+      } = req.body;
+
+      // Find the product being sold
+      const product = await Product.findById(productId).populate("ingredients");
+
+      // Check if the product exists
       if (!product) {
         return res.status(404).json({ error: "Product not found" });
       }
 
-      // Check if the product is in the food category
-      if (product.category === "food") {
-        // Subtract the sold product's ingredients from the storehouse
-        const storehouse = await Storehouse.findOne();
-        if (!storehouse) {
-          return res.status(404).json({ error: "Storehouse not found" });
-        }
-
-        for (const ingredient of product.ingredients) {
-          const storedProduct = storehouse.products.find(
-            (item) => item.product.toString() === productId
-          );
-
-          if (!storedProduct) {
-            return res
-              .status(404)
-              .json({ error: "Product not found in storehouse" });
-          }
-
-          const soldIngredientQuantity =
-            quantity * (ingredient.quantity / ingredient.unit);
-          const updatedQuantity =
-            storedProduct.quantity - soldIngredientQuantity;
-
-          if (updatedQuantity < 0) {
-            return res
-              .status(400)
-              .json({ error: "Insufficient quantity in storehouse" });
-          }
-
-          storedProduct.quantity = updatedQuantity;
-        }
-
-        // Save the updated storehouse
-        await storehouse.save();
+      // Check if the product category is "food"
+      if (!product.category || product.category.name !== "food") {
+        return res
+          .status(400)
+          .json({ error: "Only food products can be sold" });
       }
 
-      // Create a new sell entry
-      const sell = new Sells({
-        product: productId,
+      // Calculate the quantity to subtract based on the unit
+      let quantityToSubtract = quantity;
+      if (unit === "kilograms") {
+        quantityToSubtract *= 1000; // Convert kilograms to grams
+      }
+
+      // Check if the storehouse exists
+      const storehouse = await Storehouse.findOne({ name: "Main Storehouse" });
+      if (!storehouse) {
+        return res.status(404).json({ error: "Storehouse not found" });
+      }
+
+      // Subtract the sold product's ingredients from the storehouse quantity
+      for (const ingredient of product.ingredients) {
+        const ingredientQuantityToSubtract =
+          ingredient.quantity * quantityToSubtract;
+        const storehouseProduct = storehouse.products.find((p) =>
+          p.product.equals(ingredient._id)
+        );
+
+        if (!storehouseProduct) {
+          return res
+            .status(404)
+            .json({ error: "Storehouse quantitiy not found" });
+        } else {
+          storehouseProduct.quantity -= ingredientQuantityToSubtract;
+        }
+      }
+
+      // Save the updated storehouse
+      await storehouse.save();
+
+      // Create a new sale record
+      const sale = new Sells({
+        productId,
         quantity,
         unit,
+        paymentType,
+        shopId,
+        systemUserId,
+        billcount,
+        clientId,
+        totalPrice,
       });
 
-      await sell.save();
+      // Save the sale record
+      await sale.save();
 
-      return res.status(200).json({ message: "Product sold successfully" });
+      res
+        .status(200)
+        .json({ message: "Product sold successfully", data: sale });
     } catch (error) {
-      console.error(error);
-      return res.status(500).json({ error: "Internal server error" });
+      console.error("Error selling product:", error);
+      res.status(500).json({ error: "Internal server error" });
     }
   },
 };
