@@ -9,11 +9,15 @@ const storehouseSchema = new mongoose.Schema(
     address: String,
     products: [
       {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Product",
+        product: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Product",
+        },
+        quantity: {
+          type: Number,
+        },
       },
     ],
-    quantity: { type: Number, required: true },
   },
   {
     timestamps: true,

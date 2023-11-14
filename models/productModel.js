@@ -11,8 +11,8 @@ const productSchema = new mongoose.Schema(
     },
     storeID: {
       type: mongoose.Schema.ObjectId,
-      required:true,
-      ref : "Store"
+      required: true,
+      ref: "Store",
     },
     slug: {
       type: String,
@@ -116,16 +116,21 @@ const productSchema = new mongoose.Schema(
         },
       },
     ],
-<<<<<<< Updated upstream
-=======
     ingredients: [
       {
-        type: mongoose.Schema.Types.ObjectId,
-        required: true,
-        ref: "Ingredients",
+        ingredient: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Ingredients",
+        },
+        quantity: {
+          type: Number,
+        },
+        unit: {
+          type: String,
+          enum: ["grams", "kilograms"],
+        },
       },
     ],
->>>>>>> Stashed changes
     ISavailable: {
       type: Boolean,
       default: true,

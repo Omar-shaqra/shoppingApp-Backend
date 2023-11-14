@@ -40,6 +40,7 @@ const sellsRoute = require("./routes/System/sellsRoute");
 const supplierRoutes = require("./routes/System/supplierRoutes");
 const branchRoutes = require("./routes/System/branchRoutes");
 const ownerRoute = require("./routes/System/ownerRoute");
+const IngredientRoute = require("./routes/System/IngredientRoute");
 
 //APIs Services
 
@@ -57,6 +58,7 @@ app.use("/api/branch", branchRoutes);
 app.use("/api/sells", sellsRoute);
 app.use("/api/supplier", supplierRoutes);
 app.use("/api/owner", ownerRoute);
+app.use("/api/ingredients", IngredientRoute);
 
 app.use("/", (req, res) => {
   res.send("your server is run successfully");

@@ -19,11 +19,6 @@ const sellsSchema = new mongoose.Schema({
     required: true,
     ref: "User",
   },
-  date: {
-    type: Date,
-    required: true,
-    default: Date.now,
-  },
   systemUserId: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
@@ -31,6 +26,10 @@ const sellsSchema = new mongoose.Schema({
   },
   billcount: {
     type: Number,
+  },
+  unit: {
+    type: String,
+    enum: ["grams", "kilograms"],
     required: true,
   },
   shopId: {
@@ -41,6 +40,11 @@ const sellsSchema = new mongoose.Schema({
     type: String,
     required: true,
     enum: ["cash", "credit", "debit"],
+  },
+  date: {
+    type: Date,
+    required: true,
+    default: Date.now,
   },
 });
 

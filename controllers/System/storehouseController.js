@@ -1,5 +1,4 @@
 const Storehouse = require("../../models/System/storehouseModel");
-
 module.exports = {
   async createStorehouse(req, res) {
     try {

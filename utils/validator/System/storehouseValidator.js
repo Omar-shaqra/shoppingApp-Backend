@@ -12,7 +12,6 @@ const storehouseValidation = [
     .optional()
     .isNumeric()
     .withMessage("Quantity must be a number"),
-
   validatorMiddleware,
 ];
 
