@@ -122,9 +122,9 @@ const productSchema = new mongoose.Schema(
           type: mongoose.Schema.Types.ObjectId,
           ref: "Ingredients",
         },
-      },
-      { quantity: Number },
-      {
+        quantity: {
+          type: Number,
+        },
         unit: {
           type: String,
           enum: ["grams", "kilograms"],

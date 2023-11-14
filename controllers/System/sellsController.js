@@ -63,6 +63,7 @@ module.exports = {
 
   async SubtractIngedients(req, res) {
     try {
+      const storehouseId = req.params.storehouseId;
       const { productId, quantity, unit } = req.body;
       const {
         paymentType,
@@ -95,7 +96,7 @@ module.exports = {
       }
 
       // Check if the storehouse exists
-      const storehouse = await Storehouse.findOne({ name: "Main Storehouse" });
+      const storehouse = await Storehouse.findOne({ _id: storehouseId });
       if (!storehouse) {
         return res.status(404).json({ error: "Storehouse not found" });
       }
@@ -105,13 +106,14 @@ module.exports = {
         const ingredientQuantityToSubtract =
           ingredient.quantity * quantityToSubtract;
         const storehouseProduct = storehouse.products.find((p) =>
-          p.product.equals(ingredient._id)
+          p.product.equals(productId)
         );
 
         if (!storehouseProduct) {
-          return res
-            .status(404)
-            .json({ error: "Storehouse quantitiy not found" });
+          return res.status(404).json({
+            error: ` ${storehouse.products} Storehouse quantitiy not found`,
+          });
+          continue;
         } else {
           storehouseProduct.quantity -= ingredientQuantityToSubtract;
         }
