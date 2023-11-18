@@ -20,24 +20,10 @@ const sellsValidation = [
 
   check("clientId").not().isEmpty().withMessage("Client ID is required"),
 
-  check("date")
-    .not()
-    .isEmpty()
-    .withMessage("Date is required")
-    .isDate()
-    .withMessage("Date must be a valid date"),
-
   check("systemUserId")
     .not()
     .isEmpty()
     .withMessage("System user ID is required"),
-
-  check("billcount")
-    .not()
-    .isEmpty()
-    .withMessage("Bill count is required")
-    .isNumeric()
-    .withMessage("Bill count must be a number"),
 
   check("shopId").not().isEmpty().withMessage("Shop ID is required"),
 

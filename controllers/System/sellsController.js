@@ -1,14 +1,13 @@
 const Sells = require("../../models/System/sellsModels");
 const Product = require("../../models/productModel");
 const Storehouse = require("../../models/System/storehouseModel");
-const ingredient = require("../../models/System/IngredientsModel");
 
 const { incrementBillCount } = require("./billcontroller");
 module.exports = {
   async createSell(req, res) {
     try {
-      const sell = new Sells(req.body);
       await incrementBillCount();
+      const sell = new Sells(req.body);
       await sell.save();
       res.send(sell);
     } catch (err) {
@@ -65,14 +64,8 @@ module.exports = {
     try {
       const storehouseId = req.params.storehouseId;
       const { productId, quantity, unit } = req.body;
-      const {
-        paymentType,
-        shopId,
-        systemUserId,
-        clientId,
-        billcount,
-        totalPrice,
-      } = req.body;
+      const { paymentType, shopId, systemUserId, clientId, totalPrice } =
+        req.body;
 
       // Find the product being sold
       const product = await Product.findById(productId).populate("ingredients");
@@ -130,11 +123,12 @@ module.exports = {
         paymentType,
         shopId,
         systemUserId,
-        billcount,
         clientId,
         totalPrice,
       });
 
+      // Send the sell operation to bill Count
+      incrementBillCount();
       // Save the sale record
       await sale.save();
 

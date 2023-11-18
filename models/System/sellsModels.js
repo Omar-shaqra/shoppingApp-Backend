@@ -43,10 +43,31 @@ const sellsSchema = new mongoose.Schema({
   },
   date: {
     type: Date,
-    required: true,
     default: Date.now,
   },
 });
+
+sellsSchema.pre("save", async function (next) {
+  try {
+    if (this.isNew) {
+      // Get the maximum existing billcount value
+      const maxBillcount = await this.constructor
+        .findOne({}, "billcount")
+        .sort({ billcount: -1 })
+        .limit(1)
+        .lean();
+
+      // Increment the billcount by one
+      this.billcount = (maxBillcount?.billcount || 0) + 1;
+    }
+    next();
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Create the Sell model
+const Sell = mongoose.model("Sell", sellsSchema);
 
 const Sales = mongoose.model("sells", sellsSchema);
 

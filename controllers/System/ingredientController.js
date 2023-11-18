@@ -3,18 +3,16 @@ const Ingredient = require("../../models/System/IngredientsModel");
 module.exports = {
   // Create ingredient
   createIngredient: async (req, res) => {
-    const { name, quantity, unit } = req.body;
+    const { name } = req.body;
 
     try {
       const ingredient = new Ingredient({
         name,
-        quantity,
-        unit,
       });
 
       await ingredient.save();
 
-      res.json({ message: "Ingredient created" });
+      res.json({ message: "Ingredient created", data: ingredient });
     } catch (err) {
       res.status(500).json({ error: err.message });
     }
