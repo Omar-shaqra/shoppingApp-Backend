@@ -16,8 +16,8 @@ exports.createCategoryValidator = [
     .withMessage("too short category name")
     .isLength({ max: 32 })
     .withMessage("too long category name")
-    .custom((val) => {
-      const check = category.find({ name: val });
+    .custom(async (name) => {
+      const check = await category.findOne({ name });
       if (check) {
         return false;
       }
