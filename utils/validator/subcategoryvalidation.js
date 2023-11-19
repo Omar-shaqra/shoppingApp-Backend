@@ -11,8 +11,8 @@ exports.createsubcategory = [
     .withMessage("too short")
     .isLength({ max: 32 })
     .withMessage("too long")
-    .custom((val) => {
-      const check = subcategory.find({ name: val });
+    .custom(async (name) => {
+      const check = await subcategory.findOne({ name });
       if (check) {
         return false;
       }

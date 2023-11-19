@@ -16,8 +16,8 @@ exports.createBrandValidator = [
     .withMessage("Too short Brand name")
     .isLength({ max: 32 })
     .withMessage("Too long Brand name")
-    .custom((val) => {
-      const check = brand.find({ name: val });
+    .custom(async (name) => {
+      const check = await brand.findOne({ name });
       if (check) {
         return false;
       }
