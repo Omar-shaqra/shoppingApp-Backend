@@ -15,6 +15,12 @@ const {
   deleteProductValidator,
 } = require("../utils/validator/productvalidation");
 
+
+
+router.get('/searchproduct', productsObj.searchproduct)
+
+
+
 //router.get('/',catigoriesObj.createCategory);
 router
   .route("/")
@@ -44,5 +50,6 @@ router
     deleteProductValidator,
     productsObj.deleteproduct
   );
+
 
 module.exports = router;
