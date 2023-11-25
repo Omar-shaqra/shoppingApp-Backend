@@ -91,10 +91,34 @@ exports.deleteclinic = async (req, res) => {
     });
   }
 };
+exports.addPatient = async (req, res) => {
+  try {
+    const { name, age } = req.body;
+    const clinic = await Clinic.findById(req.params.id);
+    if (!clinic) {
+      return res.status(404).json({ error: "Clinc Not Found " });
+    }
 
+    const newPatient = {
+      name,
+      age,
+    };
+
+    clinic.patients.push(newPatient);
+
+    await clinic.save();
+
+    res.status(200).json(clinic);
+  } catch (err) {
+    res.status(500).json({
+      status: "fail",
+      message: err,
+    });
+  }
+};
 exports.calculatePatientCount = async (req, res) => {
   try {
-    const clinic = await Clinic.find();
+    const clinic = await Clinic.findById(req.params.id);
 
     let patientCount = 0;
 

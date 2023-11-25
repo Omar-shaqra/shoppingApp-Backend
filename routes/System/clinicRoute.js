@@ -7,6 +7,7 @@ const {
   getclinic,
   updateclinic,
   deleteclinic,
+  addPatient,
 } = require("../../controllers/System/clinicController");
 
 const {
@@ -17,12 +18,14 @@ router.route("/").get(getAllclinics);
 
 router.post("/", createclinic);
 
-router.put("/:id", validateClinic, updateclinic);
+router.put("/:id", updateclinic);
 
 router.get("/:id", getclinic);
 
 router.delete("/:id", deleteclinic);
 
-router.get("/patientcount", calculatePatientCount);
+router.post("/addPatient/:id", addPatient);
+
+router.get("/patientcount/:id", calculatePatientCount);
 
 module.exports = router;

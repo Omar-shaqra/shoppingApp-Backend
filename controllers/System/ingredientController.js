@@ -40,11 +40,42 @@ module.exports = {
 
   // Update ingredient
   updateIngredient: async (req, res) => {
-    // Update logic...
+    try {
+      const ingredient = await Ingredient.findByIdAndUpdate(
+        req.params.id,
+        req.body,
+        {
+          new: true,
+          runValidators: true,
+        }
+      );
+      res.status(200).json({
+        status: "success",
+        data: {
+          ingredient,
+        },
+      });
+    } catch (err) {
+      res.status(404).json({
+        status: "fail",
+        message: err,
+      });
+    }
   },
 
   // Delete ingredient
   deleteIngredient: async (req, res) => {
-    // Delete logic...
+    try {
+      await Ingredient.findByIdAndDelete(req.params.id);
+      res.status(204).json({
+        status: "success",
+        data: null,
+      });
+    } catch (err) {
+      res.status(404).json({
+        status: "fail",
+        message: err,
+      });
+    }
   },
 };
