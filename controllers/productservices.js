@@ -173,7 +173,7 @@ class products {
   };
   searchproduct = async (req, res) => {
     const { title } = await req.query;
-    let titleToSearch = await translate(req.query.trek, { to: 'en' })
+    let titleToSearch = await translate(req.query.q, { to: 'en' })
    
     let allProducts = await Productmodel.find({});   
     const fuseOptions = {
