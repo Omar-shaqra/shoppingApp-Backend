@@ -174,16 +174,15 @@ class products {
   searchproduct = async (req, res) => {
     const { title } = await req.query;
     let titleToSearch = await translate(req.query.q, { to: 'en' })
-   
+    console.log(titleToSearch);
     let allProducts = await Productmodel.find({});   
     const fuseOptions = {
       keys: ['title'],
-      includeScore: true,
       threshold: 0.4 // Adjust as needed
     };
     const fuse = new Fuse(allProducts, fuseOptions);
     const searchResult = fuse.search(titleToSearch);
-    res.status(200).json({ data: searchResult[0].item, length: searchResult.length});
+    res.status(200).json({ length: searchResult.length, data: searchResult});
 
 
   };
