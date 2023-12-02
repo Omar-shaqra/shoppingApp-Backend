@@ -5,7 +5,10 @@ const multerOptions = () => {
   const multerStorage = multer.memoryStorage();
 
   const multerfilter = function (req, file, cb) {
-    if (file.mimetype.startsWith("image")) {
+    if (
+      file.mimetype.startsWith("image") ||
+      file.mimetype.startsWith("images")
+    ) {
       cb(null, true);
     } else {
       cb(new ApiError("only images format allowed", 400), false);

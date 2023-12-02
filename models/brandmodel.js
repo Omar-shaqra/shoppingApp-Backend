@@ -22,7 +22,7 @@ const brandschema = mongoose.Schema(
 
 const setImageURL = function (doc) {
   if (doc.image) {
-    const imageURL = `${process.env.BASE_IRL}/brands/${doc.image}`;
+    const imageURL = `${process.env.BASE_URL}/brands/${doc.image}`;
     doc.image = imageURL;
   }
 };
