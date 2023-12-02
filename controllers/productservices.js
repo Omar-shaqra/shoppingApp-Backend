@@ -7,12 +7,8 @@ const multer = require("multer");
 const { v4: uuidv4 } = require("uuid");
 const sharp = require("sharp");
 
-
-const translate = require('translate-google');
-const Fuse = require('fuse.js');
-
-
-
+const translate = require("translate-google");
+const Fuse = require("fuse.js");
 
 const { uploadMiximages } = require("./uploadImageMiddleware");
 
@@ -134,7 +130,11 @@ class products {
     try {
       req.body.slug = slugify(req.body.title);
       console.log(req.body);
-      const product = await Productmodel.create(req.body);
+      const product = await Productmodel.create({
+        ...req.body,
+        imageCover: req.body.imageCover,
+        images: req.body.images,
+      });
       res.status(201).json({ data: product });
     } catch (err) {
       res.status(404).send(err);
@@ -173,18 +173,16 @@ class products {
   };
   searchproduct = async (req, res) => {
     const { title } = await req.query;
-    let titleToSearch = await translate(req.query.q, { to: 'en' })
+    let titleToSearch = await translate(req.query.q, { to: "en" });
     console.log(titleToSearch);
-    let allProducts = await Productmodel.find({});   
+    let allProducts = await Productmodel.find({});
     const fuseOptions = {
-      keys: ['title'],
-      threshold: 0.4 // Adjust as needed
+      keys: ["title"],
+      threshold: 0.4, // Adjust as needed
     };
     const fuse = new Fuse(allProducts, fuseOptions);
     const searchResult = fuse.search(titleToSearch);
-    res.status(200).json({ length: searchResult.length, data: searchResult});
-
-
+    res.status(200).json({ length: searchResult.length, data: searchResult });
   };
 }
 module.exports = products;
