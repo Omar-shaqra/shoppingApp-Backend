@@ -169,7 +169,7 @@ productSchema.pre(/^find/, function (next) {
   });
   next();
 });
-
+/*
 const setImageURL = (doc) => {
   if (doc.imageCover) {
     const imageUrl = `${process.env.BASE_URL}/products/${doc.imageCover}`;
@@ -184,6 +184,7 @@ const setImageURL = (doc) => {
     doc.images = imagesList;
   }
 };
+*/
 // findOne, findAll and update
 productSchema.post("init", (doc) => {
   setImageURL(doc);
@@ -193,7 +194,5 @@ productSchema.post("init", (doc) => {
 productSchema.post("save", (doc) => {
   setImageURL(doc);
 });
-
-
 
 module.exports = mongoose.model("Product", productSchema);
