@@ -15,11 +15,7 @@ const {
   deleteProductValidator,
 } = require("../utils/validator/productvalidation");
 
-
-
-router.get('/searchproduct', productsObj.searchproduct)
-
-
+router.get("/searchproduct", productsObj.searchproduct);
 
 //router.get('/',catigoriesObj.createCategory);
 router
@@ -37,19 +33,22 @@ router
   .route("/:id")
   .get(getProductValidator, productsObj.getoneproduct)
   .put(
+    /*
     Authservices.protect,
     Authservices.allowedto("admin", "manager"),
     productsObj.uploadProductImages,
     productsObj.resizeProductImages,
     updateProductValidator,
+    */
     productsObj.updateproduct
   )
   .delete(
+    /*
     Authservices.protect,
     Authservices.allowedto("admin"),
     deleteProductValidator,
+    */
     productsObj.deleteproduct
   );
-
 
 module.exports = router;
