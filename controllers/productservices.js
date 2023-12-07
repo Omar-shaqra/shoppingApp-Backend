@@ -168,9 +168,7 @@ class products {
     }
     res.status(204).send();
   });
-  escapeRegex = (text) => {
-    return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
-  };
+  
   searchproduct = async (req, res) => {
     const { title } = await req.query;
     let titleToSearch = await translate(req.query.q, { to: "en" });
