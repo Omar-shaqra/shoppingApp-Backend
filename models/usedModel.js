@@ -25,10 +25,10 @@ const setImageUrl = (doc) => {
   }
 };
 
-categorySchema.post("init", (doc) => {
+usedSchema.post("init", (doc) => {
   setImageUrl(doc);
 });
-categorySchema.post("save", (doc) => {
+usedSchema.post("save", (doc) => {
   setImageUrl(doc);
 });
 

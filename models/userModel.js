@@ -53,7 +53,7 @@ userSchema.pre("save", async function (next) {
   }
 
   //hash password to random word of 12 char's
-  this.password = await bcrypt.hash(this.password, await bycrpt.genSalt(12));
+  this.password = await bcrypt.hash(this.password, await bcrypt.genSalt(12));
   this.paswwordConfirm = undefined;
   next();
 });

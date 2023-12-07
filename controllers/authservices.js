@@ -4,7 +4,7 @@ const crypto = require("crypto");
 const asyncHandler = require("express-async-handler");
 const ApiError = require("../utils/apiError");
 
-const User = require("../models/userModel");
+const User = require("../models/usedModel");
 const bcrypt = require("bcryptjs");
 
 const { default: slugify } = require("slugify");
@@ -14,43 +14,49 @@ const createToken = (payload) =>
     expiresIn: process.env.JWT_EXPIRETIME,
   });
 
+const createSendToken = asyncHandler((user, statusCode, res) => {
+  const token = createToken(user._id);
+  res.status(statusCode).json({ status: "success", token, data: user });
+});
+
 exports.signup = asyncHandler(async (req, res, next) => {
   try {
-    if (req.body.password == req.body.passwordConfirm) {
-      req.body.password = await bcrypt.hash(req.body.password, 12);
-    } else {
-      throw new ApiError("Invalid password confirmation");
+    const existingUser = await User.findOne({ name: req.body.name });
+    if (existingUser) {
+      throw new Error("Username already taken");
     }
-    const user = await User.create({
-      name: req.body.name,
-      email: req.body.email,
-      password: req.body.password,
-      passwordConfirm: req.body.passwordConfirm,
-    });
-    const token = jwt.sign({ userid: user._id }, process.env.JWT_SECRET_KEY, {
-      expiresIn: process.env.JWT_EXPIRETIME,
-    });
-
-    res.status(201).json({ data: user, token });
+    const user = await User.create(req.body);
+    createSendToken(user, 200, res);
   } catch (err) {
-    return next(new ApiError(err, 500));
+    res.status(500).json({ status: "fail", message: `${err}` });
   }
 });
 
 exports.login = asyncHandler(async (req, res, next) => {
-  try {
-    const user = await User.findOne({ email: req.body.email });
+  const { email, password } = req.body;
 
-    if (!user || !(await bcrypt.compare(req.body.password))) {
-      return next(new ApiError("incorrect password or email", 401));
-    }
-    const token = jwt.sign({ userid: user._id }, process.env.JWT_SECRET_KEY, {
-      expiresIn: process.env.JWT_EXPIRETIME,
-    });
-    res.status(200).json({ data: user, token });
-  } catch (err) {
-    return next(new ApiError(err, 500));
+  if (!email || !password) {
+    return next(new ApiError("password or email is invalid", 404));
   }
+
+  const user = await User.findOne({ email }).select("+password");
+
+  if (!user) {
+    return next(new ApiError("No user found with that email", 404));
+  }
+
+  const matchPassword = await user.matchPassword(password);
+
+  if (!matchPassword || null) {
+    return next(new ApiError("Incorrect password", 401));
+  }
+
+  const token = createToken(user._id);
+  res.status(200).json({
+    status: "success",
+    token,
+    user,
+  });
 });
 
 exports.protect = asyncHandler(async (req, res, next) => {
