@@ -41,7 +41,7 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-userSchema.methods.matchPassord = async function (EnteredPassord) {
+userSchema.methods.matchPassword = async function (EnteredPassord) {
   return await bcrypt.compare(EnteredPassord, this.password);
 };
 
@@ -96,6 +96,6 @@ userSchema.methods.createPasswordResetToken = function () {
   return resetToken;
 };
 
-const UserModel = mongoose.model("User", userSchema);
+const userModel = mongoose.model("User", userSchema);
 
-module.exports = UserModel;
+module.exports = userModel;

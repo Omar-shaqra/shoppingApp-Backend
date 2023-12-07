@@ -4,7 +4,7 @@ const crypto = require("crypto");
 const asyncHandler = require("express-async-handler");
 const ApiError = require("../utils/apiError");
 
-const User = require("../models/usedModel");
+const User = require("../models/userModel");
 const bcrypt = require("bcryptjs");
 
 const { default: slugify } = require("slugify");
@@ -47,7 +47,7 @@ exports.login = asyncHandler(async (req, res, next) => {
 
   const matchPassword = await user.matchPassword(password);
 
-  if (!matchPassword || null) {
+  if (!matchPassword) {
     return next(new ApiError("Incorrect password", 401));
   }
 
