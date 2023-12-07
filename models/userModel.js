@@ -42,6 +42,7 @@ const userSchema = new mongoose.Schema(
 );
 
 userSchema.methods.matchPassword = async function (EnteredPassord) {
+  console.log(EnteredPassord, this.password);
   return await bcrypt.compare(EnteredPassord, this.password);
 };
 
@@ -54,7 +55,10 @@ userSchema.pre("save", async function (next) {
 
   //hash password to random word of 12 char's
   this.password = await bcrypt.hash(this.password, await bcrypt.genSalt(12));
-  this.paswwordConfirm = undefined;
+  this.passwordConfirm = await bcrypt.hash(
+    this.password,
+    await bcrypt.genSalt(12)
+  );
   next();
 });
 

@@ -21,12 +21,13 @@ const createSendToken = asyncHandler((user, statusCode, res) => {
 
 exports.signup = asyncHandler(async (req, res, next) => {
   try {
-    const existingUser = await User.findOne({ name: req.body.name });
+    const existingUser = await User.findOne({ email: req.body.email });
     if (existingUser) {
-      throw new Error("Username already taken");
+      throw new Error("Email already exisit");
+    } else {
+      const user = await User.create(req.body);
+      createSendToken(user, 200, res);
     }
-    const user = await User.create(req.body);
-    createSendToken(user, 200, res);
   } catch (err) {
     res.status(500).json({ status: "fail", message: `${err}` });
   }
