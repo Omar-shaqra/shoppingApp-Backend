@@ -15,33 +15,42 @@ const createToken = (payload) =>
   });
 
 exports.signup = asyncHandler(async (req, res, next) => {
-  if (req.body.password == req.body.passwordConfirm) {
-    req.body.password = await bcrypt.hash(req.body.password, 12);
-  } else {
-    throw new ApiError("Invalid password confirmation");
-  }
-  const user = await User.create({
-    name: req.body.name,
-    email: req.body.email,
-    password: req.body.password,
-  });
-  const token = jwt.sign({ userid: user._id }, process.env.JWT_SECRET_KEY, {
-    expiresIn: process.env.JWT_EXPIRETIME,
-  });
+  try {
+    if (req.body.password == req.body.passwordConfirm) {
+      req.body.password = await bcrypt.hash(req.body.password, 12);
+    } else {
+      throw new ApiError("Invalid password confirmation");
+    }
+    const user = await User.create({
+      name: req.body.name,
+      email: req.body.email,
+      password: req.body.password,
+      passwordConfirm: req.body.passwordConfirm,
+    });
+    const token = jwt.sign({ userid: user._id }, process.env.JWT_SECRET_KEY, {
+      expiresIn: process.env.JWT_EXPIRETIME,
+    });
 
-  res.status(201).json({ data: user, token });
+    res.status(201).json({ data: user, token });
+  } catch (err) {
+    return next(new ApiError(err, 500));
+  }
 });
 
 exports.login = asyncHandler(async (req, res, next) => {
-  const user = await User.findOne({ email: req.body.email });
+  try {
+    const user = await User.findOne({ email: req.body.email });
 
-  if (!user || !(await bcrypt.compare(req.body.password, user.password))) {
-    return next(new ApiError("incorrect password or email", 401));
+    if (!user || !(await bcrypt.compare(req.body.password))) {
+      return next(new ApiError("incorrect password or email", 401));
+    }
+    const token = jwt.sign({ userid: user._id }, process.env.JWT_SECRET_KEY, {
+      expiresIn: process.env.JWT_EXPIRETIME,
+    });
+    res.status(200).json({ data: user, token });
+  } catch (err) {
+    return next(new ApiError(err, 500));
   }
-  const token = jwt.sign({ userid: user._id }, process.env.JWT_SECRET_KEY, {
-    expiresIn: process.env.JWT_EXPIRETIME,
-  });
-  res.status(200).json({ data: user, token });
 });
 
 exports.protect = asyncHandler(async (req, res, next) => {

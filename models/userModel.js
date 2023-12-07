@@ -1,4 +1,6 @@
 const mongoose = require("mongoose");
+const bcrypt = require("bcryptjs");
+const crypto = require("crypto");
 
 const userSchema = new mongoose.Schema(
   {
@@ -21,6 +23,11 @@ const userSchema = new mongoose.Schema(
       required: [true, "password required"],
       minlength: [6, "password too short"],
     },
+    passwordConfirm: {
+      type: String,
+      required: [true, "password required"],
+      minlength: [6, "password too short"],
+    },
     passwordChangedAt: Date,
     passwordRestCode: String,
     passwordRestExp: Date,
@@ -33,6 +40,61 @@ const userSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+userSchema.methods.matchPassord = async function (EnteredPassord) {
+  return await bcrypt.compare(EnteredPassord, this.password);
+};
+
+userSchema.pre("save", async function (next) {
+  //run when password modified
+
+  if (!this.isModified("password")) {
+    return next();
+  }
+
+  //hash password to random word of 12 char's
+  this.password = await bcrypt.hash(this.password, await bycrpt.genSalt(12));
+  this.paswwordConfirm = undefined;
+  next();
+});
+
+userSchema.pre("save", async function (next) {
+  //run when password modified
+
+  if (!this.isModified("password") || this.isNew) {
+    return next();
+  }
+
+  userSchema.pre(/^find/, function (next) {
+    this.find({ active: { $ne: false } });
+    next();
+  });
+
+  //hash password to random word of 12 char's
+  this.passwordChangedAt = Date.now() - 1000;
+  next();
+});
+
+userSchema.methods.changePasswordAt = function (JWTTimestamp) {
+  if (this.passwordChangedAt) {
+    const changeTimestamp = this.passwordChangedAt.getTime();
+    console.log(changeTimestamp, JWTTimestamp);
+    return JWTTimestamp < changeTimestamp;
+  }
+  return false;
+};
+
+userSchema.methods.createPasswordResetToken = function () {
+  const resetToken = crypto.randomBytes(32).toString("hex");
+  this.PasswordResetToken = crypto
+    .createHash("sha256")
+    .update(resetToken)
+    .digest("hex");
+
+  this.PasswordResetExpired = Date.now() + 10 * 60 * 1000;
+
+  return resetToken;
+};
 
 const UserModel = mongoose.model("User", userSchema);
 
