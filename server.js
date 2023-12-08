@@ -12,6 +12,12 @@ dotenv.config({ path: "config.env" });
 const app = express();
 //test config
 
+const cors = require("cors")
+app.use(cors({
+    origin: "*"
+}));
+
+
 //connect db
 dbConnecion();
 //middle ware
@@ -29,6 +35,7 @@ const authroute = require("./routes/authRoutes");
 const categoryRoute = require("./routes/categoryRoute");
 const brandroute = require("./routes/brandRoutes");
 const productroute = require("./routes/productRoutes");
+
 const subcategoryroute = require("./routes/subcategoryRoutes");
 const cartRoute = require("./routes/cartRoutes");
 
