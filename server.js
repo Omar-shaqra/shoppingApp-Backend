@@ -14,7 +14,7 @@ const app = express();
 
 const cors = require("cors")
 app.use(cors({
-    origin: "https://ecommerce-management-wheat.vercel.app/"
+    origin: "*"
 }));
 
 
@@ -72,7 +72,7 @@ app.use("/api/factory", FactoryRoute);
 app.use("/api/clinics", ClinicRoute);
 
 app.use("/", (req, res) => {
-  res.send("your server is run successfullyyy");
+  res.send("your server is run successfullyy");
 });
 
 //ERROR HANDLING
