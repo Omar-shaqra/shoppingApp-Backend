@@ -72,7 +72,7 @@ app.use("/api/factory", FactoryRoute);
 app.use("/api/clinics", ClinicRoute);
 
 app.use("/", (req, res) => {
-  res.send("your server is run successfully");
+  res.send("your server is run successfullyy");
 });
 
 //ERROR HANDLING
