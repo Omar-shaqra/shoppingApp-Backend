@@ -5,6 +5,15 @@ const factorySchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  factory_type: {
+    type: String,
+    required: true,
+  },
+
+  aboutUs: {
+    type: String,
+    required: true,
+  },
   address: {
     street: String,
     city: String,
@@ -24,7 +33,11 @@ const factorySchema = new mongoose.Schema({
       },
     },
   ],
-
+  category: {
+    type: mongoose.Schema.ObjectId,
+    ref: "category",
+    required: [true, "subcategory nust be belong to parent category"],
+  },
   products: [
     {
       product: {
