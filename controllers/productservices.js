@@ -30,6 +30,10 @@ class products {
 
   resizeProductImages = async (req, res, next) => {
     //1- processing for imageCover
+    if (!req.files) {
+      return res.status(400).send("No files uploaded");
+    }
+
     if (req.files.imageCover) {
       const imageCoverFilename = `product-${uuidv4()}-${Date.now()}-cover.jpeg`;
 
@@ -168,7 +172,7 @@ class products {
     }
     res.status(204).send();
   });
-  
+
   searchproduct = async (req, res) => {
     const { title } = await req.query;
     let titleToSearch = await translate(req.query.q, { to: "en" });

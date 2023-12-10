@@ -23,9 +23,9 @@ router
   .post(
     // Authservices.protect,
     // Authservices.allowedto("admin", "manager"),
-    // productsObj.uploadProductImages,
-    // productsObj.resizeProductImages,
-    createProductValidator,
+    productsObj.uploadProductImages,
+    productsObj.resizeProductImages,
+    //createProductValidator,
     productsObj.createproduct
   )
   .get(productsObj.getproducts);
