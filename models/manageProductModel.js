@@ -20,6 +20,10 @@ const manageProduct = new mongoose.Schema(
     date: {
         type: Date,
         required: true
+    },
+    removed:{
+      type: Boolean,
+      default: false
     }
   },
   { timestamps: true }
