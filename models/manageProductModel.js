@@ -7,9 +7,9 @@ const manageProduct = new mongoose.Schema(
       ref: "Product",
       required: true,
     },
-    storeId:{
+    shopeId:{
         type: mongoose.Schema.ObjectId,
-        ref: "Store",
+        ref: "Branch",
         required: true,
     },
     userId:{
