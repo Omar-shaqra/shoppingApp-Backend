@@ -38,6 +38,8 @@ const productroute = require("./routes/productRoutes");
 
 const subcategoryroute = require("./routes/subcategoryRoutes");
 const cartRoute = require("./routes/cartRoutes");
+const manageProductRoute = require("./routes/manageProductRoutes");
+
 
 // In system folder
 const billRoute = require("./routes/System/billRoutes");
@@ -51,6 +53,7 @@ const IngredientRoute = require("./routes/System/IngredientRoute");
 const FactoryRoute = require("./routes/System/FactoryRoute");
 const ClinicRoute = require("./routes/System/clinicRoute");
 
+
 //APIs Services
 
 app.use("/api/users", userRouter);
@@ -59,6 +62,7 @@ app.use("/api/categories", categoryRoute);
 app.use("/api/subcategories", subcategoryroute);
 app.use("/api/brands", brandroute);
 app.use("/api/products", productroute);
+app.use("/api/menageProducts", manageProductRoute);
 app.use("/api/carts", cartRoute);
 app.use("/api/bills", billRoute);
 app.use("/api/stores", storeRoute);
