@@ -23,8 +23,8 @@ router
   .post(
     // Authservices.protect,
     // Authservices.allowedto("admin", "manager"),
-    productsObj.uploadProductImages,
-    productsObj.resizeProductImages,
+    // productsObj.uploadProductImages,
+    // productsObj.resizeProductImages,
     //createProductValidator,
     productsObj.createproduct
   )
