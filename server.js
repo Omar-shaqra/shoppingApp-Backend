@@ -12,11 +12,12 @@ dotenv.config({ path: "config.env" });
 const app = express();
 //test config
 
-const cors = require("cors")
-app.use(cors({
-    origin: "*"
-}));
-
+const cors = require("cors");
+app.use(
+  cors({
+    origin: "*",
+  })
+);
 
 //connect db
 dbConnecion();
@@ -35,11 +36,11 @@ const authroute = require("./routes/authRoutes");
 const categoryRoute = require("./routes/categoryRoute");
 const brandroute = require("./routes/brandRoutes");
 const productroute = require("./routes/productRoutes");
+const OrderRoute = require("./routes/orderRoutes");
 
 const subcategoryroute = require("./routes/subcategoryRoutes");
 const cartRoute = require("./routes/cartRoutes");
 const manageProductRoute = require("./routes/manageProductRoutes");
-
 
 // In system folder
 const billRoute = require("./routes/System/billRoutes");
@@ -53,7 +54,6 @@ const IngredientRoute = require("./routes/System/IngredientRoute");
 const FactoryRoute = require("./routes/System/FactoryRoute");
 const ClinicRoute = require("./routes/System/clinicRoute");
 
-
 //APIs Services
 
 app.use("/api/users", userRouter);
@@ -62,6 +62,7 @@ app.use("/api/categories", categoryRoute);
 app.use("/api/subcategories", subcategoryroute);
 app.use("/api/brands", brandroute);
 app.use("/api/products", productroute);
+app.use("/api/orders", OrderRoute);
 app.use("/api/menageProducts", manageProductRoute);
 app.use("/api/carts", cartRoute);
 app.use("/api/bills", billRoute);
