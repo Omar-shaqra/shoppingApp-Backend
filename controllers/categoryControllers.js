@@ -29,7 +29,10 @@ exports.resizeImage = asyncHandler(async (req, res, next) => {
 //@desc get list of categories
 //@route get/api/v1/categories
 //@acess public
-
+exports.getCategories = asyncHandler(async (req, res, next) => {
+  const category = await Category.find({});
+  res.status(200).json({ results: category.length, data: category });
+});
 //@desc get specific category by id
 //@route get/api/v1/categories:id
 //acess public
