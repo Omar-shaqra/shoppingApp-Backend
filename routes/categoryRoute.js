@@ -18,6 +18,9 @@ const {
 
 const router = express.Router();
 
+const subcategoriesHandlerRoute = require("./subcategoryRoutes");
+router.use("/:categoryid/subcategories", subcategoriesHandlerRoute);
+
 router
   .route("/")
   .post(
